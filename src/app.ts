@@ -1,23 +1,20 @@
 import "dotenv/config"
-import { Request, Response } from "express";
+import express, { Request, Response } from "express";
+
+import { router } from "./routes";
 
 const github_id = process.env.GITHUB_CLIENT_ID
-
-
 const PORT = 4000;
-import express from "express"
-
 const app = express()
 
+app.use(express.json())
+app.use(router)
 
-app.get("/github", (request: Request, response: Response) => {
-    console.log(github_id)
-    console.log("Chegou aqui")
+app.get("/github", (request: Request, response: Response) => {    
     response.redirect(`https://github.com/login/oauth/authorize?client_id=${github_id}`)
 })
 
-app.get("/signin/callback", (req: Request, res: Response) => {
-    console.log("chegou aqui 2")
+app.get("/signin/callback", (req: Request, res: Response) => {    
     const {code} = req.query;
     return res.json(code)
 })
